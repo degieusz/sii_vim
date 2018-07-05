@@ -1,11 +1,14 @@
 execute pathogen#infect()
+
 let mapleader =","
 nnoremap  <F12> :!cscope -bR<CR>:cs reset<CR><CR>
 nnoremap <C-A> :NERDTreeToggle<cr>
 nnoremap <leader>nt :NERDTreeFind<cr>
-nnoremap <leader>mr :MRU<cr>
+nnoremap <leader>m :MRU<cr>
 nnoremap <leader>tt :TagbarToggle<cr>
-nnoremap <leader>gre :%!grep 
+nnoremap <leader>gre :%!grep <space>
+nnoremap <leader>igre :%!grep -v <space>
+nnoremap <leader>vgre :vimgrep  <cword> %<cr>
 nnoremap <tab> %
 nnoremap <C-]> g<C-]>
 
@@ -13,9 +16,10 @@ nnoremap <C-]> g<C-]>
 nnoremap ; :
 
 imap jk <esc>
+imap kj <esc>
 set number
 colorscheme dracula
-set clipboard=unnamed
+set clipboard=unnamedplus
 set hlsearch
 set smartcase
 set ignorecase
@@ -65,10 +69,14 @@ set smarttab
 " 1 tab == 4 spaces
 set shiftwidth=4
 set tabstop=4
+set smartindent "?
+set autoindent
 
 "set cindent
+"
 filetype plugin on
 filetype plugin indent on
+set background=light
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -80,21 +88,6 @@ set shellcmdflag=-ic
 
 set laststatus=2
 set wrap
-
-"Search path for gF
-
-let g:defaultpath = &path
-set path+=$CPLANE_WORKING_COPY/C_Application/**
-set path+=$CPLANE_WORKING_COPY/lteDo/C_Application/**
-set path+=$CPLANE_WORKING_COPY/I_Interface/**
-set path+=$CPLANE_WORKING_COPY/C_Test/cplane_k3/src/**
-let g:cplanepath = &path
-let &path = g:defaultpath
-
-"smart gF
-"map<f6> <ESC>:let &path = g:cplanepath<CR><C-W>gF<CR>:let &path = g:defaultpath<CR><CR>
-
-
 
 " simple mappings to save a lot of time
 com W w
@@ -293,6 +286,7 @@ function SexyPlane()
 "go to line taken in the begining
     exe ":".b:line
 endfun
+
 map <F2> :call SwitchToHeader()<CR>
 nnoremap <leader>a :call SwitchToHeader()<CR>
 map <F3> :call SwitchToSource()<CR>
@@ -302,45 +296,19 @@ map <F6> :call SwitchToInterface()<CR>
 map <F9> :call SexyPlane()<CR>
 
 set hidden
-"Search path for gF
-
-let g:defaultpath = &path
-set path+=$CPLANE_WORKING_COPY/C_Application/**
-set path+=$CPLANE_WORKING_COPY/lteDo/C_Application/**
-set path+=$CPLANE_WORKING_COPY/I_Interface/**
-set path+=$CPLANE_WORKING_COPY/C_Test/cplane_k3/src/**
-let g:cplanepath = &path
-let &path = g:defaultpath
-
-map<f6> <ESC>:let &path = g:cplanepath<CR><C-W>gF<CR>:let &path = g:defaultpath<CR><CR>
-" s: Find this C symbol
- nnoremap  <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
-" " g: Find this definition
- nnoremap  <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
-" " d: Find functions called by this function
- nnoremap  <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
-" " c: Find functions calling this function
- nnoremap  <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
-" " t: Find this text string
- nnoremap  <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
-" " e: Find this egrep pattern
- nnoremap  <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
-" " f: Find this file
- nnoremap  <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
-" " i: Find files #including this file
- nnoremap  <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
 
 set tags=/var/fpwork/dgudersk/bts_sc_cplane/lteDo/Tags/tags
 set tags+=/var/fpwork/dgudersk/bts_sc_cplane/lteDo/Tags/tags_ut
 set tags+=/var/fpwork/dgudersk/bts_sc_cplane/lteDo/Tags/tags_ttcn3
+set tags+=/var/fpwork/dgudersk/bts_sc_cplane/lteDo/Tags/tags_dg_k3lteasn1
+"set tags+=/var/fpwork/dgudersk/bts_sc_cplane/lteDo/Tags/tags_issar_cpp
+set tags+=/var/fpwork/dgudersk/bts_sc_cplane/lteDo/I_Interface/Application_Env/Isar_Env/tags
 
 "./lteTools/scbm/bin/lte_env_utils.sh -utf
-"
-
 
 "buffers
-nnoremap <leader>ma <C-w>_ <C-w>\|
-nnoremap <leader>re <C-w>=
+nnoremap <leader>bm <C-w>_ <C-w>\|
+nnoremap <leader>br <C-w>=
 
 nnoremap <leader>bd :BD<cr>
 nnoremap <leader>bn :BF<cr>
@@ -355,18 +323,95 @@ nnoremap <leader>gb :Gblame<cr>
 let MRU_Max_Entries = 1000
 
 nnoremap <leader>ev :e ~/.vimrc<cr>
+nnoremap <leader>eb :e ~/.bashrc<cr>
+nnoremap <leader>sv :source ~/.vimrc<cr>
 nnoremap <leader>clr :nohl<cr>
 
 nnoremap <C-j> :m +1<cr>
 nnoremap <C-k> :m -2<cr>
 
-nnoremap <leader>o :set paste<CR>m`o<Esc>``:set nopaste<CR>
-nnoremap <leader>O :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
 nnoremap <leader>do m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <leader>dO m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 
 "search and replace word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <leader>sa :bufdo! %s/\<<C-r><C-w>\>//ge<left><left><left>
+
 nnoremap <leader>z :A<cr>
 nnoremap <C-w><C-w> <C-W><C-p>
+
+" Make shift-insert work like in Xterm:
+map       <S-Insert>  <MiddleMouse>
+map!  <S-Insert>  <MiddleMouse>
+
+" Remove trailing whitespace after bufwrite
+autocmd BufWrite * silent! %s/\s\+$//ge
+if executable('ag')
+      let g:ackprg = 'ag --vimgrep'
+  endif
+
+nnoremap <leader>awc :Ack <cword><cr>
+nnoremap <leader>ab :Ack <cword> %<cr>
+nnoremap <leader>acb :Ack  %<left><left>
+nnoremap <leader>aw :Ack <cword><cr>
+nnoremap <leader>awt :Ack <cword> C_Test/<cr>
+nnoremap <leader>aia :Ack <cword> C_Application/<cr>
+nnoremap <leader>aa :Ack <cword> --ignore-dir Test_modules C_Application/<cr>
+nnoremap <leader>ar :Ack <cword> C_Application/SC_RROM<cr>
+nnoremap <leader>air :Ack <cword> --ignore-dir Test_modules C_Application/SC_RROM<cr>
+nnoremap <leader>ac :Ack <cword> C_Application/SC_CELLC<cr>
+nnoremap <leader>aic :Ack <cword> --ignore-dir Test_modules C_Application/SC_CELLC<cr>
+nnoremap <leader>ai :Ack <cword> I_Interface/<cr>
+nnoremap <leader>av :Ack <cword>
+nnoremap <C-y> :e **/
+nnoremap <C-y>t :e C_Test/**/
+
+nnoremap <C-y>r :e C_Application/SC_RROM/**/
+nnoremap <C-y>c :e C_Application/SC_CELLC/**/
+nnoremap <C-y>u :e C_Application/SC_UEC/**/
+nnoremap <C-y>a :e C_Application/**/
+nnoremap <C-y>i :e I_Interface/**/
+
+let &t_SI = "\<Esc>]12;yellow\x7"
+let &t_EI = "\<Esc>]12;blue\x7"
+nnoremap <leader>ll :BLines<cr>
+nnoremap <leader>lo :Locate
+nnoremap <leader>lg :Lines<cr>
+nnoremap <leader>lb :Buffers<cr>
+
+" Make it obvious where 80 characters is
+set colorcolumn=+1
+set textwidth=0 wrapmargin=0
+
+" Switch between the last two files
+nnoremap <Leader><Leader> <C-^>
+set rtp+=~/.fzf
+set cursorline
+let NERDTreeShowLineNumbers=1
+nnoremap <leader>mb :vertical resize +10<cr>
+nnoremap <leader>ms :vertical resize -10<cr>
+nnoremap <leader>mhb :resize +10<cr>
+nnoremap <leader>mhs :resize -10<cr>
+autocmd BufRead,BufNewFile *.ttcn* set filetype=ttcn
+autocmd! Syntax ttcn source ~/.vim/syntax/ttcn.vim
+
+autocmd BufRead,BufNewFile *.log set filetype=nsn-syslog
+autocmd! Syntax nsn-syslog source ~/.vim/syntax/nsn-syslog.vim
+
+autocmd BufRead,BufNewFile *.k3.txt,*k3.log set filetype=nsn-k3txt
+autocmd! Syntax nsn-syslog source ~/.vim/syntax/nsn-k3txt.vim
+
+autocmd BufRead,BufNewFile *.out set filetype=nsn-syslog
+autocmd BufRead,BufNewFile *.LOG set filetype=nsn-syslog
+
+
+"file extension ignore in search
+:set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
+
+nmap <leader>sfp :let @+=expand("%:p")<CR>
+nmap <leader>sfi :let @+=expand("%:t")<CR>
+nmap <leader>sfn :let @+=expand("%:t")<CR>
+
+nnoremap <leader>tn :tabNext<cr>
+nnoremap <leader>tp :tabprevious<cr>

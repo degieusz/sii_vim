@@ -161,7 +161,6 @@ if version >= 508 || !exists("g:did_ttcn_syn_inits")
 
 endif
 
-setlocal smartindent
 
 let b:current_syntax = "ttcn"
 
